@@ -1326,6 +1326,12 @@ static int s5pv310_target(struct cpufreq_policy *policy,
 		if (old_index > L3)
 			old_index = L3;
 	}
+/* prevent freqs going above max policy - netarchy */
+	if (s5pv310_freq_table[index].frequency > policy->max) {
+		while (s5pv310_freq_table[index].frequency > policy-> max) {
+			index += 1;
+		}
+	}
 
 	freqs.new = s5pv310_freq_table[index].frequency;
 	freqs.cpu = policy->cpu;
@@ -2323,7 +2329,7 @@ static int s5pv310_asv_table_update(void)
 			}
 			break;
 		case 5:
-			if (s5pv310_max_armclk == ARMCLOCK_1400MHZ) {
+			if (s5pv310_max_armclk == ARMCLOCK_1600MHZ) {
 				if (i == 3)
 					/* s5pv310_volt_table[i].arm_volt */ exp_UV_mV[i] -= (25*1000);
 				else
