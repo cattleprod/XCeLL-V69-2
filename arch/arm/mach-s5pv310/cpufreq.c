@@ -49,7 +49,7 @@
 #include <mach/regs-tmu.h>
 
 /* UV */
-extern int exp_UV_mV[7];
+extern int exp_UV_mV[5];
 
 static struct clk *arm_clk;
 static struct clk *moutcore;
@@ -2267,7 +2267,6 @@ static int s5pv310_asv_table_update(void)
 		if (exp_UV_mV[i] > 1300000)
 			exp_UV_mV[i] = 1300000;
 		
->>>>>>> e4832d0... voltage control sysfs interface
 		/* Minimum Voltage */
 /*		if (s5pv310_volt_table[i].arm_volt < 925000)
 			s5pv310_volt_table[i].arm_volt = 925000;
