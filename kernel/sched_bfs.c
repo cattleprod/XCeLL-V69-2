@@ -556,6 +556,26 @@ static inline void __task_grq_unlock(void)
 	grq_unlock();
 }
 
+/*
+ * Look for any tasks *anywhere* that are running nice 0 or better. We do
+ * this lockless for overhead reasons since the occasional wrong result
+ * is harmless.
+ */
+int above_background_load(void)
+{
+	struct task_struct *cpu_curr;
+	unsigned long cpu;
+
+	for_each_online_cpu(cpu) {
+		cpu_curr = cpu_rq(cpu)->curr;
+		if (unlikely(!cpu_curr))
+			continue;
+		if (PRIO_TO_NICE(cpu_curr->static_prio) < 1)
+			return 1;
+	}
+	return 0;
+}
+
 #ifndef __ARCH_WANT_UNLOCKED_CTXSW
 static inline void prepare_lock_switch(struct rq *rq, struct task_struct *next)
 {
@@ -1333,7 +1353,7 @@ static inline int online_cpus(struct task_struct *p)
  */
 static inline int needs_other_cpu(struct task_struct *p, int cpu)
 {
-	if (unlikely(!cpu_isset(cpu, p->cpus_allowed)))
+	if (unlikely(!cpu_isset(cpu, p->cpus_allowed) && online_cpus(p)))
 		return 1;
 	return 0;
 }
@@ -1356,15 +1376,15 @@ static void try_preempt(struct task_struct *p, struct rq *this_rq)
 	 * re-scheduling has occurred and we should ignore the sticky flag.
 	 */
 	clear_sticky(p);
+	
+	/* IDLEPRIO tasks never preempt anything */
+	if (p->policy == SCHED_IDLEPRIO)
+		return;
 
 	if (suitable_idle_cpus(p)) {
 		resched_best_idle(p);
 		return;
 	}
-
-	/* IDLEPRIO tasks never preempt anything */
-	if (p->policy == SCHED_IDLEPRIO)
-		return;
 
 	if (likely(online_cpus(p)))
 		cpus_and(tmp, cpu_online_map, p->cpus_allowed);
@@ -2940,7 +2960,7 @@ need_resched_nonpreemptible:
 		prev->last_ran = rq->clock;
 
 		/* Task changed affinity off this CPU */
-		if (needs_other_cpu(prev, cpu))
+		if (unlikely(!cpu_isset(cpu, prev->cpus_allowed)))
 			resched_suitable_idle(prev);
 		else if (!deactivate) {
 			if (!queued_notrunning()) {
@@ -4941,30 +4961,6 @@ void move_task_off_dead_cpu(int dead_cpu, struct task_struct *p)
 
 }
 
-/* Run through task list and find tasks affined to just the dead cpu, then
- * allocate a new affinity */
-static void break_sole_affinity(int src_cpu)
-{
-	struct task_struct *p, *t;
-
-	do_each_thread(t, p) {
-		if (!online_cpus(p)) {
-			cpumask_copy(&p->cpus_allowed, cpu_possible_mask);
-			/*
-			 * Don't tell them about moving exiting tasks or
-			 * kernel threads (both mm NULL), since they never
-			 * leave kernel.
-			 */
-			if (p->mm && printk_ratelimit()) {
-				printk(KERN_INFO "process %d (%s) no "
-				       "longer affine to cpu %d\n",
-				       task_pid_nr(p), p->comm, src_cpu);
-			}
-		}
-		clear_sticky(p);
-	} while_each_thread(t, p);
-}
-
 /*
  * Schedules idle task to be the next runnable task on current CPU.
  * It does so by boosting its priority to highest possible.
@@ -4985,7 +4981,6 @@ void sched_idle_next(void)
 	 * and interrupts disabled on the current cpu.
 	 */
 	grq_lock_irqsave(&flags);
-	break_sole_affinity(this_cpu);
 
 	__setscheduler(idle, rq, SCHED_FIFO, MAX_RT_PRIO - 1);
 
