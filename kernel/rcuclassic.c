@@ -76,6 +76,9 @@ static struct rcu_ctrlblk rcu_bh_ctrlblk = {
 static DEFINE_PER_CPU(struct rcu_data, rcu_data);
 static DEFINE_PER_CPU(struct rcu_data, rcu_bh_data);
 
+int rcu_scheduler_active __read_mostly;
+EXPORT_SYMBOL_GPL(rcu_scheduler_active);
+
 /*
  * Increment the quiescent state counter.
  * The counter is a bit degenerated: We do not need to know
@@ -890,6 +893,21 @@ int __cpuinit rcu_cpu_notify(struct notifier_block *self,
 static struct notifier_block __cpuinitdata rcu_nb = {
 	.notifier_call	= rcu_cpu_notify,
 };
+
+/*
+ * This function is invoked towards the end of the scheduler's initialization
+ * process.  Before this is called, the idle task might contain
+ * RCU read-side critical sections (during which time, this idle
+ * task is booting the system).  After this function is called, the
+ * idle tasks are prohibited from containing RCU read-side critical
+ * sections.  This function also enables RCU lockdep checking.
+ */
+void rcu_scheduler_starting(void)
+{
+        WARN_ON(num_online_cpus() != 1);
+        WARN_ON(nr_context_switches() > 0);
+        rcu_scheduler_active = 1;
+}
 
 /*
  * Initializes rcu mechanism.  Assumed to be called early.
