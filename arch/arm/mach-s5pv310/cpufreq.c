@@ -642,24 +642,24 @@ struct cpufreq_voltage_table {
 static struct cpufreq_voltage_table s5pv310_lookup_volt_table[] = {
 	{
 		.index		= L0,
-		.arm_volt	= 1300000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L1,
 		.arm_volt	= 1200000,
 		.int_volt	= 1100000,
 	}, {
-		.index		= L2,
-		.arm_volt	= 1100000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L3,
+		.index		= L1,
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
+		.index		= L2,
+		.arm_volt	= 950000,
+		.int_volt	= 950000,
+	}, {
+		.index		= L3,
+		.arm_volt	= 900000,
+		.int_volt	= 900000,
+	}, {
 		.index		= L4,
-		.arm_volt	= 975000,
-		.int_volt	= 1000000,
+		.arm_volt	= 850000,
+		.int_volt	= 850000,
 	},
 };
 
@@ -685,48 +685,48 @@ static unsigned int s5pv310_lookup_apll_pms_table[CPUFREQ_LEVEL_END] = {
 static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 	{
 		.index		= L0,
-		.arm_volt	= 1300000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L1,
 		.arm_volt	= 1200000,
 		.int_volt	= 1100000,
 	}, {
-		.index		= L2,
-		.arm_volt	= 1100000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L3,
+		.index		= L1,
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
+		.index		= L2,
+		.arm_volt	= 950000,
+		.int_volt	= 950000,
+	}, {
+		.index		= L3,
+		.arm_volt	= 900000,
+		.int_volt	= 900000,
+	}, {
 		.index		= L4,
-		.arm_volt	= 975000,
-		.int_volt	= 1000000,
+		.arm_volt	= 850000,
+		.int_volt	= 850000,
 	},
 };
 #else
 static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 	{
-		.index		= L0,
-		.arm_volt	= 1300000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L1,
+	.index		= L0,
 		.arm_volt	= 1200000,
 		.int_volt	= 1100000,
 	}, {
-		.index		= L2,
-		.arm_volt	= 1100000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L3,
+		.index		= L1,
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
-		.index		= L4,
+		.index		= L2,
 		.arm_volt	= 950000,
-		.int_volt	= 1000000,
+		.int_volt	= 950000,
+	}, {
+		.index		= L3,
+		.arm_volt	= 900000,
+		.int_volt	= 900000,
+	}, {
+		.index		= L4,
+		.arm_volt	= 850000,
+		.int_volt	= 850000,
 	},
 };
 #endif
@@ -749,21 +749,25 @@ static unsigned int s5pv310_apll_pms_table[CPUFREQ_LEVEL_END] = {
 #else
 static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 	{
-		.index		= L0,
+	.index		= L0,
 		.arm_volt	= 1200000,
 		.int_volt	= 1100000,
 	}, {
 		.index		= L1,
-		.arm_volt	= 1100000,
-		.int_volt	= 1100000,
-	}, {
-		.index		= L2,
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
-		.index		= L3,
+		.index		= L2,
 		.arm_volt	= 950000,
-		.int_volt	= 1000000,
+		.int_volt	= 950000,
+	}, {
+		.index		= L3,
+		.arm_volt	= 900000,
+		.int_volt	= 900000,
+	}, {
+		.index		= L4,
+		.arm_volt	= 850000,
+		.int_volt	= 850000,
 	},
 };
 
