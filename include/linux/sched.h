@@ -276,7 +276,7 @@ extern void init_idle_bootup_task(struct task_struct *idle);
 
 extern cpumask_var_t nohz_cpu_mask;
 #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ)
-extern void select_nohz_load_balancer(int stop_tick);
+extern int select_nohz_load_balancer(int stop_tick);
 extern int get_nohz_load_balancer(void);
 #else
 static inline void select_nohz_load_balancer(int stop_tick)
@@ -284,6 +284,7 @@ static inline void select_nohz_load_balancer(int stop_tick)
 	return 0;
 }
 #endif
+
 extern int get_nohz_timer_target(void);
 
 /*
@@ -1558,7 +1559,6 @@ static inline int iso_task(struct task_struct *p)
 	return (p->policy == SCHED_ISO);
 }
 extern void remove_cpu(unsigned long cpu);
-extern int above_background_load(void);
 #else /* CFS */
 extern int runqueue_is_locked(int cpu);
 static inline void cpu_scaling(int cpu)
