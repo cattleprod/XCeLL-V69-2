@@ -12,6 +12,7 @@ TOOLCHAIN="/home/legend/android/toolchains/4.5.4/android-toolchain-eabi/bin/arm-
 ROOTFS_PATH="/home/legend/android/initramfs/miui/"
 
 
+
 echo "Cleaning latest build"
 make ARCH=arm CROSS_COMPILE=$TOOLCHAIN -j`grep 'processor' /proc/cpuinfo | wc -l` clean
 

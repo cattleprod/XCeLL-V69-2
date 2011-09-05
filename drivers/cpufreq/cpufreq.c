@@ -36,7 +36,7 @@
 						"cpufreq-core", msg)
 
 /* UV */
-int exp_UV_mV[5] = { 1300000, 1200000, 1100000, 1000000, 975000 };
+int exp_UV_mV[7] = { 1450000, 1300000, 1300000, 1200000, 1100000, 1000000, 975000 };
 
 /**
  * The "cpufreq driver" - the arch- or hardware-dependent low
@@ -655,7 +655,7 @@ static ssize_t show_scaling_setspeed(struct cpufreq_policy *policy, char *buf)
 /* sysfs interface for UV control */
 static ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf) {
 
-      return sprintf(buf, "1200mhz: %d mV\n1000mhz: %d mV\n800mhz: %d mV\n500mhz: %d mV\n200mhz: %d mV\n", exp_UV_mV[0]/1000, exp_UV_mV[1]/1000, exp_UV_mV[2]/1000, exp_UV_mV[3]/1000, exp_UV_mV[4]/1000);
+      return sprintf(buf, "1600mhz: %d mV\n1400mhz: %d mV\n1200mhz: %d mV\n1000mhz: %d mV\n800mhz: %d mV\n500mhz: %d mV\n200mhz: %d mV\n", exp_UV_mV[0]/1000, exp_UV_mV[1]/1000, exp_UV_mV[2]/1000, exp_UV_mV[3]/1000, exp_UV_mV[4]/1000, exp_UV_mV[5]/1000, exp_UV_mV[6]/1000);
 
 }
 
@@ -664,12 +664,12 @@ static ssize_t store_UV_mV_table(struct cpufreq_policy *policy,
 
       unsigned int ret = -EINVAL;
       int i = 0;
-      ret = sscanf(buf, "%d %d %d %d %d", &exp_UV_mV[0], &exp_UV_mV[1], &exp_UV_mV[2], &exp_UV_mV[3], &exp_UV_mV[4]);
-      if(ret != 5) {
+      ret = sscanf(buf, "%d %d %d %d %d %d %d", &exp_UV_mV[0], &exp_UV_mV[1], &exp_UV_mV[2], &exp_UV_mV[3], &exp_UV_mV[4], &exp_UV_mV[5], &exp_UV_mV[6]);
+      if(ret != 7) {
               return -EINVAL;
       }
       else
-              for( i = 0; i < 5; i++ )
+              for( i = 0; i < 7; i++ )
               {
 	if (exp_UV_mV[i] < 800) {
 		exp_UV_mV[i] = 800;
