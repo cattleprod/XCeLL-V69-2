@@ -774,6 +774,9 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
 	account_entity_enqueue(cfs_rq, se);
 
 	if (flags & ENQUEUE_WAKEUP) {
+		if (sched_feat(INTERACTIVE)
+			&& flags & ENQUEUE_LATENCY && !(flags & ENQUEUE_IO))
+				se->interactive = 1;
 		place_entity(cfs_rq, se, 0);
 		enqueue_sleeper(cfs_rq, se);
 	}
@@ -915,14 +918,14 @@ static struct sched_entity *pick_next_entity(struct cfs_rq *cfs_rq)
 	struct sched_entity *se = __pick_next_entity(cfs_rq);
 	struct sched_entity *left = se;
 
-	if (cfs_rq->next && wakeup_preempt_entity(cfs_rq->next, left) < 1)
-		se = cfs_rq->next;
-
-	/*
-	 * Prefer last buddy, try to return the CPU to a preempted task.
-	 */
 	if (cfs_rq->last && wakeup_preempt_entity(cfs_rq->last, left) < 1)
 		se = cfs_rq->last;
+
+	/*
+	 * Prefer the next buddy, only set through the interactivity logic.
+	 */
+	if (cfs_rq->next && wakeup_preempt_entity(cfs_rq->next, left) < 1)
+		se = cfs_rq->next;
 
 	clear_buddies(cfs_rq, se);
 
@@ -1046,6 +1049,9 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
 {
 	struct cfs_rq *cfs_rq;
 	struct sched_entity *se = &p->se;
+	
+	if (p->in_iowait)
+		flags |= ENQUEUE_IO;
 
 	for_each_sched_entity(se) {
 		if (se->on_rq)
@@ -1658,6 +1664,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
 	 * tasks for there to be buddies.
 	 */
 	int buddies = (cfs_rq->nr_running >= 2);
+	int preempt = 0;
 
 	if (unlikely(rt_prio(p->prio)))
 		goto preempt;
@@ -1668,8 +1675,13 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
 	if (unlikely(se == pse))
 		return;
 
-	if (sched_feat(NEXT_BUDDY) && buddies && !(wake_flags & WF_FORK))
+	if (sched_feat(INTERACTIVE)
+		&& !(wake_flags & WF_FORK) && pse->interactive) {
+		clear_buddies(cfs_rq, NULL);
 		set_next_buddy(pse);
+		preempt = 1;
+		buddies = 0;
+	}
 
 	/*
 	 * We can come here with TIF_NEED_RESCHED already set from new task
@@ -1695,7 +1707,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
 	update_curr(cfs_rq);
 	find_matching_se(&se, &pse);
 	BUG_ON(!pse);
-	if (wakeup_preempt_entity(se, pse) == 1)
+	if (preempt || wakeup_preempt_entity(se, pse) == 1)
 		goto preempt;
 
 	return;

@@ -1,0 +1,28 @@
+From 41ae84dc230b7e6903c8093c2d1ea9177e30359d Mon Sep 17 00:00:00 2001
+Message-Id: <41ae84dc230b7e6903c8093c2d1ea9177e30359d.1315184977.git.hot2009wheels@hotmail.com>
+In-Reply-To: <a4656eef4910f3ef802417e6bd17e3983b2fd5db.1315184977.git.hot2009wheels@hotmail.com>
+References: <a4656eef4910f3ef802417e6bd17e3983b2fd5db.1315184977.git.hot2009wheels@hotmail.com>
+From: LorD ClockaN <davor@losinj.com>
+Date: Thu, 19 May 2011 15:28:47 +0200
+Subject: [PATCH 06/14] UPDATE: remove excess warning
+
+---
+ arch/arm/kernel/return_address.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/arch/arm/kernel/return_address.c b/arch/arm/kernel/return_address.c
+index df246da..b24a350 100644
+--- a/arch/arm/kernel/return_address.c
++++ b/arch/arm/kernel/return_address.c
+@@ -57,7 +57,7 @@ void *return_address(unsigned int level)
+ 
+ #else /* if defined(CONFIG_FRAME_POINTER) && !defined(CONFIG_ARM_UNWIND) */
+ 
+-#if defined(CONFIG_ARM_UNWIND)
++#if 0 /*defined(CONFIG_ARM_UNWIND)*/
+ #warning "TODO: return_address should use unwind tables"
+ #endif
+ 
+-- 
+1.7.4.1
+

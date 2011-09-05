@@ -1,0 +1,49 @@
+From a4656eef4910f3ef802417e6bd17e3983b2fd5db Mon Sep 17 00:00:00 2001
+Message-Id: <a4656eef4910f3ef802417e6bd17e3983b2fd5db.1315184977.git.hot2009wheels@hotmail.com>
+From: LorD ClockaN <davor@losinj.com>
+Date: Tue, 21 Jun 2011 21:33:26 +0200
+Subject: [PATCH 01/14] writeback: avoid unnecessary determine_dirtyable_memory call
+
+    I think determine_dirtyable_memory() is a rather costly function since it
+    need many atomic reads for gathering zone/global page state.  But when we
+    use vm_dirty_bytes && dirty_background_bytes, we don't need that costly
+    calculation.
+
+    This patch eliminates such unnecessary overhead.
+
+    NOTE : newly added if condition might add overhead in normal path.
+           But it should be _really_ small because anyway we need the
+           access both vm_dirty_bytes and dirty_background_bytes so it is
+           likely to hit the cache.
+
+    [akpm@linux-foundation.org: fix used-uninitialised warning]
+    Signed-off-by: Minchan Kim <minchan.kim@gmail.com>
+    Cc: Wu Fengguang <fengguang.wu@intel.com>
+    Cc: Peter Zijlstra <a.p.zijlstra@chello.nl>
+    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ mm/page-writeback.c |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 582cba1..78153f7 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -422,9 +422,12 @@ get_dirty_limits(unsigned long *pbackground, unsigned long *pdirty,
+ {
+ 	unsigned long background;
+ 	unsigned long dirty;
+-	unsigned long available_memory = determine_dirtyable_memory();
++	unsigned long uninitialized_var(available_memory);
+ 	struct task_struct *tsk;
+ 
++	if (!vm_dirty_bytes || !dirty_background_bytes)
++		available_memory = determine_dirtyable_memory();
++
+ 	if (vm_dirty_bytes)
+ 		dirty = DIV_ROUND_UP(vm_dirty_bytes, PAGE_SIZE);
+ 	else {
+-- 
+1.7.4.1
+
