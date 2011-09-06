@@ -674,9 +674,9 @@ struct cpufreq_voltage_table {
 /* Using lookup table to support 1200MHz/1000MHz by reading chip id */
 static struct cpufreq_voltage_table s5pv310_lookup_volt_table[] = {
 	{
-		.index          = L0,
-		.arm_volt       = 1450000,
-		.int_volt       = 1100000,
+		.index      = L0,
+		.arm_volt   = 1450000,
+		.int_volt   = 1100000,
 	}, {
 		.index		= L1,
 		.arm_volt	= 1300000,
@@ -731,9 +731,9 @@ static unsigned int s5pv310_lookup_apll_pms_table[CPUFREQ_LEVEL_END] = {
 #ifdef CONFIG_S5PV310_ASV
 static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 	{
-		.index          = L0,
-		.arm_volt       = 1450000,
-		.int_volt       = 1100000,
+		.index      = L0,
+		.arm_volt   = 1450000,
+		.int_volt   = 1100000,
 	}, {
 		.index		= L1,
 		.arm_volt	= 1300000,
@@ -763,9 +763,9 @@ static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 #else
 static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 	{
-		.index          = L0,
-		.arm_volt       = 1450000,
-		.int_volt       = 1100000,
+		.index      = L0,
+		.arm_volt   = 1450000,
+		.int_volt   = 1100000,
 	}, {
 		.index		= L1,
 		.arm_volt	= 1300000,
@@ -1487,7 +1487,7 @@ static int busload_observor(struct busfreq_table *freq_table,
 			unsigned int cpu_bus_load,
 			unsigned int pre_idx,
 			unsigned int *index)
-{
+{ 
 	unsigned int i, target_freq, idx = 0;
 
 	if ((freqs.new == s5pv310_freq_table[L0].frequency)) {
@@ -1836,18 +1836,13 @@ static int s5pv310_cpufreq_resume(struct cpufreq_policy *policy)
 static int s5pv310_cpufreq_notifier_event(struct notifier_block *this,
 		unsigned long event, void *ptr)
 {
-	static int max, min;
-	struct cpufreq_policy *policy = cpufreq_cpu_get(0);
 	unsigned int cpu = 0;
 	int ret = 0;
 
 	switch (event) {
 	case PM_SUSPEND_PREPARE:
-		max = policy->max;
-		min = policy->min;
-		policy->max = policy->min = s5pv310_freq_table[L3].frequency;
-		ret = cpufreq_driver_target(policy,
-		s5pv310_freq_table[L4].frequency, DISABLE_FURTHER_CPUFREQ);
+		ret = cpufreq_driver_target(cpufreq_cpu_get(cpu),
+		s5pv310_freq_table[L1].frequency, DISABLE_FURTHER_CPUFREQ);
 		if (WARN_ON(ret < 0))
 			return NOTIFY_BAD;
 #ifdef CONFIG_S5PV310_BUSFREQ
@@ -1858,10 +1853,8 @@ static int s5pv310_cpufreq_notifier_event(struct notifier_block *this,
 	case PM_POST_RESTORE:
 	case PM_POST_SUSPEND:
 		printk(KERN_DEBUG "PM_POST_SUSPEND for CPUFREQ: %d\n", ret);
-		ret = cpufreq_driver_target(policy,
-		s5pv310_freq_table[L4].frequency, ENABLE_FURTHER_CPUFREQ);
-		policy->max = max;
-		policy->min = min;
+		ret = cpufreq_driver_target(cpufreq_cpu_get(cpu),
+		s5pv310_freq_table[L1].frequency, ENABLE_FURTHER_CPUFREQ);
 #ifdef CONFIG_S5PV310_BUSFREQ
 		s5pv310_busfreq_lock_free(DVFS_LOCK_ID_PM);
 #endif
@@ -2354,8 +2347,8 @@ static int s5pv310_asv_table_update(void)
 /*		if (s5pv310_volt_table[i].arm_volt > 1450000)
 			s5pv310_volt_table[i].arm_volt = 1450000;
 */
-		if (exp_UV_mV[i] > 1450000)
-			exp_UV_mV[i] = 1450000;
+		if (exp_UV_mV[i] > 1500000)
+			exp_UV_mV[i] = 1500000;
 		
 		/* Minimum Voltage */
 /*		if (s5pv310_volt_table[i].arm_volt < 925000)
