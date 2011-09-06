@@ -72,7 +72,7 @@ static unsigned long down_rate_us;
  * When ramping up frequency with no idle cycles jump to at least this frequency.
  * Zero disables. Set a very high value to jump to policy max freqeuncy.
  */
-#define DEFAULT_UP_MIN_FREQ 1188000
+#define DEFAULT_UP_MIN_FREQ 1000000
 static unsigned int up_min_freq;
 
 /*
@@ -81,7 +81,7 @@ static unsigned int up_min_freq;
  * to minimize wakeup issues.
  * Set sleep_max_freq=0 to disable this behavior.
  */
-#define DEFAULT_SLEEP_MAX_FREQ 594000
+#define DEFAULT_SLEEP_MAX_FREQ 500000
 static unsigned int sleep_max_freq;
 
 /*
@@ -94,13 +94,13 @@ static unsigned int sample_rate_jiffies;
  * Freqeuncy delta when ramping up.
  * zero disables causes to always jump straight to max frequency.
  */
-#define DEFAULT_RAMP_UP_STEP 115200
+#define DEFAULT_RAMP_UP_STEP 800000
 static unsigned int ramp_up_step;
 
 /*
  * Max freqeuncy delta when ramping down. zero disables.
  */
-#define DEFAULT_MAX_RAMP_DOWN 230400
+#define DEFAULT_MAX_RAMP_DOWN 0
 static unsigned int max_ramp_down;
 
 /*
@@ -547,9 +547,9 @@ static int cpufreq_governor_smartass(struct cpufreq_policy *new_policy,
 		pm_idle = cpufreq_idle;
 
 		this_smartass->cur_policy = new_policy;
-		this_smartass->cur_policy->max = CONFIG_MSM_CPU_FREQ_ONDEMAND_MAX;
-		this_smartass->cur_policy->min = CONFIG_MSM_CPU_FREQ_ONDEMAND_MIN;
-		this_smartass->cur_policy->cur = CONFIG_MSM_CPU_FREQ_ONDEMAND_MAX;
+		this_smartass->cur_policy->max = new_policy->max;
+		this_smartass->cur_policy->min = new_policy->min;
+		this_smartass->cur_policy->cur = new_policy->max;
 		this_smartass->enable = 1;
 
 		// notice no break here!
