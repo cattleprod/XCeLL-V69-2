@@ -1318,6 +1318,10 @@ static void resched_task(struct task_struct *p)
 static void sched_rt_avg_update(struct rq *rq, u64 rt_delta)
 {
 }
+
+static void sched_avg_update(struct rq *rq)
+{
+}
 #endif /* CONFIG_SMP */
 
 #if BITS_PER_LONG == 32
@@ -3293,6 +3297,8 @@ static void update_cpu_load_active(struct rq *this_rq)
 	update_cpu_load(this_rq);
 
 	calc_load_account_active(this_rq);
+	
+	sched_avg_update(this_rq);
 }
 
 #ifdef CONFIG_SMP
