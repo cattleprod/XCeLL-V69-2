@@ -1931,8 +1931,8 @@ void account_system_vtime(struct task_struct *curr)
 	if (!sched_clock_irqtime)
 		return;
 		
-	now = sched_clock();
 	cpu = smp_processor_id();
+	now = sched_clock_cpu(cpu);
 	delta = now - per_cpu(irq_start_time, cpu);
 	per_cpu(irq_start_time, cpu) = now;
 	/*
