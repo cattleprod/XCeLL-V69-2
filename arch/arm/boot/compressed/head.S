@@ -125,21 +125,16 @@ wait:		mrc	p14, 0, pc, c0, c1, 0
  * sort out different calling conventions
  */
 		.align
-		.arm        @ Always enter in ARM state
 start:
 		.type	start,#function
-		.rept  7
+		.rept	8
 		mov	r0, r0
 		.endr
-		ARM(    mov  r0, r0    )
-		ARM(    b  1f    )
-THUMB(    adr  r12, BSYM(1f)  )
-THUMB(    bx  r12    )
 
+		b	1f
 		.word	0x016f2818		@ Magic numbers to help the loader
 		.word	start			@ absolute load/run zImage address
 		.word	_edata			@ zImage end address
-THUMB(    .thumb      )
 1:		mov	r7, r1			@ save architecture ID
 		mov	r8, r2			@ save atags pointer
 
@@ -174,121 +169,46 @@ not_angel:
 		 */
 
 		.text
+		adr	r0, LC0
+ ARM(		ldmia	r0, {r1, r2, r3, r4, r5, r6, r11, ip, sp})
+ THUMB(		ldmia	r0, {r1, r2, r3, r4, r5, r6, r11, ip}	)
+ THUMB(		ldr	sp, [r0, #32]				)
+		subs	r0, r0, r1		@ calculate the delta offset
 
-#ifdef CONFIG_CRYPTO_FIPS
+#ifndef CONFIG_CRYPTO_FIPS
+						@ if delta is zero, we are
+		beq	not_relocated		@ running at the address we
+						@ were linked at.
+#else
 		beq	not_relocated_copy
 #endif
 
-		bl  cache_on
-		
-restart:  adr  r0, LC0
-		ldmia  r0, {r1, r2, r3, r5, r6, r9, r11, r12}
-		ldr  sp, [r0, #32]
-		
 		/*
-		 * We might be running at a different address.  We need
-		 * to fix up various pointers.
+		 * We're running at a different address.  We need to fix
+		 * up various pointers:
+		 *   r5 - zImage base address (_start)
+		 *   r6 - size of decompressed image
+		 *   r11 - GOT start
+		 *   ip - GOT end
 		 */
-		sub  r0, r0, r1    @ calculate the delta offset
-		add  r5, r5, r0    @ _start
-		add  r6, r6, r0    @ _edata
-		
-#ifndef CONFIG_ZBOOT_ROM
-		/* malloc space is above the relocated stack (64k max) */
-		add  sp, sp, r0
-		add  r10, sp, #0x10000
-#else
-		/*
-		 * With ZBOOT_ROM the bss/stack is non relocatable,
-		 * but someone could still run this code from RAM,
-		 * in which case our reference is _edata.
-		 */
-		mov  r10, r6
-#endif
-
-/*
- * Check to see if we will overwrite ourselves.
- *   r4  = final kernel address
- *   r5  = start of this image
- *   r9  = size of decompressed image
- *   r10 = end of this image, including  bss/stack/malloc space if non XIP
- * We basically want:
- *   r4 >= r10 -> OK
- *   r4 + image length <= r5 -> OK
- */
-		cmp  r4, r10
-		bhs  wont_overwrite
-		add  r10, r4, r9
-		cmp  r10, r5
-		bls  wont_overwrite
-		
-/*
- * Relocate ourselves past the end of the decompressed kernel.
- *   r5  = start of this image
- *   r5  = start of this image
- *   r6  = _edata
- *   r10 = end of the decompressed kernel
- * Because we always copy ahead, we need to do it from the end and go
- * backward in case the source and destination overlap.
- */
-		/* Round up to next 256-byte boundary. */
-		add  r10, r10, #256
-		bic  r10, r10, #255
-		
-		sub  r9, r6, r5    @ size to copy
-		add  r9, r9, #31    @ rounded up to a multiple
-		bic  r9, r9, #31    @ ... of 32 bytes
-		add  r6, r9, r5
-		add  r9, r9, r10
-		
-1:    		ldmdb  r6!, {r0 - r3, r10 - r12, lr}
-		cmp  r6, r5
-		stmdb  r9!, {r0 - r3, r10 - r12, lr}
-		bhi  1b
-		
-		/* Preserve offset to relocated code. */
-		sub  r6, r9, r6
-		
-#ifndef CONFIG_ZBOOT_ROM
-		/* cache_clean_flush may use the stack, so relocate it */
-		add  sp, sp, r6
-#endif
-		
-		bl  cache_clean_flush
-		
-		adr  r0, BSYM(restart)
-		add  r0, r0, r6
-		mov  pc, r0
-		
-wont_overwrite:
-/*
- * If delta is zero, we are running at the address we were linked at.
- *   r0  = delta
- *   r2  = BSS start
- *   r3  = BSS end
- *   r4  = kernel execution address
- *   r7  = architecture ID
- *   r8  = atags pointer
- *   r11 = GOT start
- *   r12 = GOT end
- *   sp  = stack pointer
- */
-		teq  r0, #0
-		beq  not_relocated
+		add	r5, r5, r0
 		add	r11, r11, r0
-		add  r12, r12, r0
+		add	ip, ip, r0
 
 #ifndef CONFIG_ZBOOT_ROM
 		/*
 		 * If we're running fully PIC === CONFIG_ZBOOT_ROM = n,
 		 * we need to fix up pointers into the BSS region.
-		 * Note that the stack pointer has already been fixed up.
+		 *   r2 - BSS start
+		 *   r3 - BSS end
+		 *   sp - stack pointer
 		 */
 		add	r2, r2, r0
 		add	r3, r3, r0
 #ifdef CONFIG_CRYPTO_FIPS
 		bl	copy_compressed
 #endif
+		add	sp, sp, r0
 
 		/*
 		 * Relocate all entries in the GOT table.
@@ -296,7 +216,7 @@ wont_overwrite:
 1:		ldr	r1, [r11, #0]		@ relocate entries in the GOT
 		add	r1, r1, r0		@ table.  This fixes up the
 		str	r1, [r11], #4		@ C references.
-		cmp	r11, r12
+		cmp	r11, ip
 		blo	1b
 #else
 
@@ -309,7 +229,7 @@ wont_overwrite:
 		cmphs	r3, r1			@ _end < entry
 		addlo	r1, r1, r0		@ table.  This fixes up the
 		str	r1, [r11], #4		@ C references.
-		cmp	r11, r12
+		cmp	r11, ip
 		blo	1b
 #endif
 
@@ -321,24 +241,76 @@ not_relocated:	mov	r0, #0
 		cmp	r2, r3
 		blo	1b
 
+		/*
+		 * The C runtime environment should now be setup
+		 * sufficiently.  Turn the cache on, set up some
+		 * pointers, and start decompressing.
+		 */
+		bl	cache_on
+
+		mov	r1, sp			@ malloc space above stack
+		add	r2, sp, #0x10000	@ 64k max
+
 /*
- * The C runtime environment should now be setup sufficiently.
- * Set up some pointers, and start decompressing.
- *   r4  = kernel execution address
- *   r7  = architecture ID
- *   r8  = atags pointer
+ * Check to see if we will overwrite ourselves.
+ *   r4 = final kernel address
+ *   r5 = start of this image
+ *   r6 = size of decompressed image
+ *   r2 = end of malloc space (and therefore this image)
+ * We basically want:
+ *   r4 >= r2 -> OK
+ *   r4 + image length <= r5 -> OK
  */
-		mov  r0, r4
-		mov  r1, sp      @ malloc space above stack
-		add  r2, sp, #0x10000  @ 64k max
+		cmp	r4, r2
+		bhs	wont_overwrite
+		add	r0, r4, r6
+		cmp	r0, r5
+		bls	wont_overwrite
+
+		mov	r5, r2			@ decompress after malloc space
+		mov	r0, r5
 		mov	r3, r7
 		bl	decompress_kernel
 
-		bl  cache_off
-		mov  r0, #0      @ must be zero
-		mov  r1, r7      @ restore architecture number
-		mov  r2, r8      @ restore atags pointer
-		mov  pc, r4      @ call kernel
+		add	r0, r0, #127 + 128	@ alignment + stack
+		bic	r0, r0, #127		@ align the kernel length
+/*
+ * r0     = decompressed kernel length
+ * r1-r3  = unused
+ * r4     = kernel execution address
+ * r5     = decompressed kernel start
+ * r7     = architecture ID
+ * r8     = atags pointer
+ * r9-r12,r14 = corrupted
+ */
+		add	r1, r5, r0		@ end of decompressed kernel
+		adr	r2, reloc_start
+		ldr	r3, LC1
+		add	r3, r2, r3
+1:		ldmia	r2!, {r9 - r12, r14}	@ copy relocation code
+		stmia	r1!, {r9 - r12, r14}
+		ldmia	r2!, {r9 - r12, r14}
+		stmia	r1!, {r9 - r12, r14}
+		cmp	r2, r3
+		blo	1b
+		mov	sp, r1
+		add	sp, sp, #128		@ relocate the stack
+
+		bl	cache_clean_flush
+ ARM(		add	pc, r5, r0		) @ call relocation code
+ THUMB(		add	r12, r5, r0		)
+ THUMB(		mov	pc, r12			) @ call relocation code
+
+/*
+ * We're not in danger of overwriting ourselves.  Do this the simple way.
+ *
+ * r4     = kernel execution address
+ * r7     = architecture ID
+ */
+wont_overwrite:	mov	r0, r4
+		mov	r3, r7
+		bl	decompress_kernel
+		b	call_kernel
 
 		.align	2
 		.type	LC0, #object
@@ -347,11 +319,11 @@ LC0:		.word	LC0			@ r1
 		.word	_end			@ r3
 		.word	zreladdr		@ r4
 		.word	_start			@ r5
-		.word   _edata     	    @ r6
-		.word   _image_size     @ r9
+		.word	_image_size		@ r6
 		.word	_got_start		@ r11
 		.word	_got_end		@ ip
 		.word	user_stack_end		@ sp
+LC1:		.word	reloc_end - reloc_start
 		.size	LC0, . - LC0
 
 #ifdef CONFIG_ARCH_RPC
@@ -404,7 +376,7 @@ copy_compressed:
  * On exit,
  *  r1, r2, r3, r9, r10, r12 corrupted
  * This routine must preserve:
- *  r4, r7, r8
+ *  r4, r5, r6, r7, r8
  */
 		.align	5
 cache_on:	mov	r3, #8			@ cache_on function
@@ -593,6 +565,43 @@ __common_mmu_cache_on:
 		mrc	p15, 0, r0, c1, c0, 0	@ and read it back to
 		sub	pc, lr, r0, lsr #32	@ properly flush pipeline
 #endif
+
+/*
+ * All code following this line is relocatable.  It is relocated by
+ * the above code to the end of the decompressed kernel image and
+ * executed there.  During this time, we have no stacks.
+ *
+ * r0     = decompressed kernel length
+ * r1-r3  = unused
+ * r4     = kernel execution address
+ * r5     = decompressed kernel start
+ * r7     = architecture ID
+ * r8     = atags pointer
+ * r9-r12,r14 = corrupted
+ */
+		.align	5
+reloc_start:	add	r9, r5, r0
+		sub	r9, r9, #128		@ do not copy the stack
+		debug_reloc_start
+		mov	r1, r4
+1:
+		.rept	4
+		ldmia	r5!, {r0, r2, r3, r10 - r12, r14}	@ relocate kernel
+		stmia	r1!, {r0, r2, r3, r10 - r12, r14}
+		.endr
+
+		cmp	r5, r9
+		blo	1b
+		mov	sp, r1
+		add	sp, sp, #128		@ relocate the stack
+		debug_reloc_end
+
+call_kernel:	bl	cache_clean_flush
+		bl	cache_off
+		mov	r0, #0			@ must be zero
+		mov	r1, r7			@ restore architecture number
+		mov	r2, r8			@ restore atags pointer
+		mov	pc, r4			@ call kernel
 
 /*
  * Here follow the relocatable cache support functions for the
@@ -799,7 +808,7 @@ proc_types:
  * reading the control register, but ARMv4 does.
  *
  * On exit, r0, r1, r2, r3, r9, r12 corrupted
- * This routine must preserve: r4, r7, r8
+ * This routine must preserve: r4, r6, r7
  */
 		.align	5
 cache_off:	mov	r3, #12			@ cache_off function
@@ -874,7 +883,7 @@ __armv3_mmu_cache_off:
  * On exit,
  *  r1, r2, r3, r9, r11, r12 corrupted
  * This routine must preserve:
- *  r4, r6, r7, r8
+ *  r0, r4, r5, r6, r7
  */
 		.align	5
 cache_clean_flush:
@@ -1092,6 +1101,7 @@ memdump:	mov	r12, r0
 #endif
 
 		.ltorg
+reloc_end:
 
 		.align
 		.section ".stack", "w"
