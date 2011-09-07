@@ -7010,6 +7010,8 @@ static void init_sched_groups_power(int cpu, struct sched_domain *sd)
 
 	if (cpu != group_first_cpu(sd->groups))
 		return;
+		
+	sd->groups->group_weight = cpumask_weight(sched_group_cpus(sd->groups));
 
 	child = sd->child;
 
