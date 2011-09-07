@@ -1967,7 +1967,7 @@ extern void enable_sched_clock_irqtime(void);
 extern void disable_sched_clock_irqtime(void);
 #else
 static inline void enable_sched_clock_irqtime(void) {}
-static inline void enable_sched_clock_irqtime(void) {}
+static inline void disable_sched_clock_irqtime(void) {}
 #endif
 
 extern unsigned long long
