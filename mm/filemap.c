@@ -1025,7 +1025,7 @@ static void do_generic_file_read(struct file *filp, loff_t *ppos,
 
 	for (;;) {
 		struct page *page;
-		pgoff_t end_index;
+		pgoff_t end_index = 0;
 		loff_t isize = 0;
 		unsigned long nr, ret;
 

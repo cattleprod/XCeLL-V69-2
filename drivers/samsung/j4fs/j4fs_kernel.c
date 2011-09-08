@@ -1221,7 +1221,7 @@ int j4fs_fill_super(struct super_block *sb, void *data, int silent)
 	struct j4fs_sb_info * sbi;
 	struct j4fs_super_block * es;
 	struct inode *root;
-	u32 tmp, len,ret;
+	u32 ret;
 
 	T(J4FS_TRACE_FS,("%s %d\n",__FUNCTION__,__LINE__));
 

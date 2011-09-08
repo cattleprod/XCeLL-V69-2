@@ -625,7 +625,7 @@ static void CBusResetToIdle ( byte channel )
 static byte CBusCheckInterruptStatus ( byte channel )
 {
 	byte 	intStatus, result;
-	byte     vs_cmd, vs_data;
+	byte     vs_cmd = 0, vs_data = 0;
 	byte 	writeBurstLen 	= 0;
 
 	/* Read CBUS interrupt status.  */

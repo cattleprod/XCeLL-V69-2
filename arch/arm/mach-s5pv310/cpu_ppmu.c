@@ -68,7 +68,7 @@ void s5pv310_cpu_ppmu_stop(struct s5pv310_cpu_ppmu_hw *ppmu)
 void s5pv310_cpu_ppmu_update(struct s5pv310_cpu_ppmu_hw *ppmu)
 {
 	void __iomem *cpu_ppmu_base = ppmu->cpu_hw_base;
-	unsigned int i, percent;
+	unsigned int i;
 
 	ppmu->ccnt = __raw_readl(cpu_ppmu_base + 0x0100);
 

@@ -42,7 +42,6 @@
 #include "mali_ukk.h"
 #include "mali_kernel_common.h"
 #include "mali_kernel_license.h"
-#include "mali_kernel_pm.h"
 #include "mali_device_pause_resume.h"
 #include "mali_linux_pm.h"
 

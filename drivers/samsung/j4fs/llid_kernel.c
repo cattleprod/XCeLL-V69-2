@@ -60,9 +60,7 @@ extern unsigned int j4fs_traceMask;
   */
 int FlashDevRead(j4fs_device_info *dev_ptr, DWORD offset, DWORD length, BYTE *buffer)
 {
-    	DWORD nVol=0;
 	int ret=-1;
-	int part_id=dev_ptr->device;
 
 // J4FS for moviNAND merged from ROSSI
 #ifdef J4FS_USE_MOVI
@@ -118,9 +116,7 @@ int FlashDevRead(j4fs_device_info *dev_ptr, DWORD offset, DWORD length, BYTE *bu
   */
 int FlashDevWrite(j4fs_device_info *dev_ptr, DWORD offset, DWORD length, BYTE *buffer)
 {
-    	DWORD nVol=0;
 	int ret=-1;
-	int part_id=dev_ptr->device;
 
 // J4FS for moviNAND merged from ROSSI
 #ifdef J4FS_USE_MOVI

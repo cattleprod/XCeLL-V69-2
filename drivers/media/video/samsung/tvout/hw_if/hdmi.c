@@ -1379,8 +1379,6 @@ int s5p_hdmi_audio_init(
 
 void s5p_hdmi_reg_mute(bool en)
 {
-	static u8 prev_audio;
-	u8 reg;
 
 	s5p_hdmi_reg_bluescreen(en);
 #if 0

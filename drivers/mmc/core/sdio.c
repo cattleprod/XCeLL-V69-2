@@ -467,7 +467,7 @@ static void mmc_sdio_detect(struct mmc_host *host)
  */
 static int mmc_sdio_suspend(struct mmc_host *host)
 {
-	int i, err = 0;
+	int err = 0;
 #ifndef BRCM_PATCH
 	for (i = 0; i < host->card->sdio_funcs; i++) {
 		struct sdio_func *func = host->card->sdio_func[i];
@@ -502,7 +502,7 @@ static int mmc_sdio_suspend(struct mmc_host *host)
 
 static int mmc_sdio_resume(struct mmc_host *host)
 {
-	int i, err = 0;
+	int err = 0;
 #ifndef BRCM_PATCH
 	BUG_ON(!host);
 	BUG_ON(!host->card);

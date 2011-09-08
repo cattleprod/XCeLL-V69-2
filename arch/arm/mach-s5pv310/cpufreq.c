@@ -2015,8 +2015,6 @@ static int iem_clock_init(void)
 	struct clk *clk_hpm;
 	struct clk *clk_copy;
 	struct clk *clk_parent;
-	struct clk *clk_iec;
-	struct clk *clk_apc;
 
 	/* PWI clock setting */
 	clk_copy = clk_get(NULL, "sclk_pwi");
@@ -2433,7 +2431,7 @@ static int s5pv310_asv_table_update(void)
 
 static void s5pv310_asv_set_voltage()
 {
-	unsigned int asv_arm_index, asv_int_index;
+	unsigned int asv_arm_index = 0, asv_int_index = 0;
 	unsigned int asv_arm_volt, asv_int_volt;
 	unsigned int rate;
 

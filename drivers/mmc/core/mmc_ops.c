@@ -391,9 +391,7 @@ static int mmc_send_trimsize_cmd(struct mmc_card *card, u32 arg)
 static int mmc_send_trimsize_erase_cmd(struct mmc_card *card)
 {
 	int err;
-    unsigned int timeout = 0;
 	struct mmc_command cmd;
-	u32 status;
 
 	BUG_ON(!card);
 	BUG_ON(!card->host);
@@ -511,7 +509,6 @@ static int mmc_read_trimsize_data(struct mmc_card *card, u32 *trimsize)
 int mmc_send_trimsize(struct mmc_card *card, u32 *trimsize)
 {
 	int ret;
-	u32 status;
 
 	/*init trimsize to zero*/
 	*trimsize = 0;

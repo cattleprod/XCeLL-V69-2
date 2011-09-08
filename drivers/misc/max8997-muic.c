@@ -513,7 +513,7 @@ static int max8997_muic_set_usb_path(struct max8997_muic_info *info, int path)
 	struct max8997_muic_data *mdata = info->muic_data;
 	int ret;
 	int gpio_val;
-	u8 accdet, cntl1_val, cntl1_msk, cntl2_val;
+	u8 accdet, cntl1_val, cntl1_msk = 0, cntl2_val;
 
 	if (mdata->set_safeout) {
 		ret = mdata->set_safeout(path);

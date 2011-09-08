@@ -1129,7 +1129,6 @@ static int mtpg_function_setup(struct usb_function *f,
 	struct usb_request	*req = cdev->req;
 	int signal_request = 0;
 	int value = -EOPNOTSUPP;
-	u16			w_index = le16_to_cpu(ctrl->wIndex);
 	u16			w_value = le16_to_cpu(ctrl->wValue);
 	u16			w_length = le16_to_cpu(ctrl->wLength);
 

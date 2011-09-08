@@ -391,7 +391,6 @@ int check_module_cid(dhd_pub_t *dhd)
 	unsigned char cis_buf[128] = {0};
 	unsigned char cid_buf[10] = {0};
 	const char* cidfilepath = "/data/.cid.info";
-	int nread;
 
 	/* Try reading out from CIS */
 	cis_rw_t *cish = (cis_rw_t *)&cis_buf[8];
