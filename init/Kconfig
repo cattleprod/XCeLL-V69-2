@@ -23,6 +23,11 @@ config CONSTRUCTORS
 
 menu "General setup"
 
+config AOSP_ROM
+	bool "AOSP compatibility"
+	---help---
+	  compatibility for Miui/cyanogen
+
 config SCHED_BFS
 	bool "BFS cpu scheduler"
 	---help---
