@@ -88,14 +88,14 @@ DECLARE_EVENT_CLASS(cpu,
 	
 	TP_printk("state=%lu cpu_id=%lu", (unsigned long)__entry->state,
 		(unsigned long)__entry->cpu_id)
-};
+);
 
 DEFINE_EVENT(cpu, cpu_idle,
 
 	TP_PROTO(unsigned int state, unsigned int cpu_id),
 	
 	TP_ARGS(state, cpu_id)
-};
+);
 
 /* This file can get included multiple times, TRACE_HEADER_MULTI_READ at top */
 #ifndef _PWR_EVENT_AVOID_DOUBLE_DEFINING
@@ -109,7 +109,7 @@ DEFINE_EVENT(cpu, cpu_frequency,
 	TP_PROTO(unsigned int frequency, unsigned int cpu_id),
 	
 	TP_ARGS(frequency, cpu_id)
-};
+);
 		
 #endif /* _TRACE_POWER_H */
 
