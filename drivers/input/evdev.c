@@ -86,7 +86,9 @@ static void evdev_event(struct input_handle *handle,
 	event.code = code;
 	event.value = value;
 
+#ifndef CONFIG_SCHED_BFS
 	sched_wake_interactive_enable();
+#endif
 	rcu_read_lock();
 
 	client = rcu_dereference(evdev->grab);
@@ -99,7 +101,9 @@ static void evdev_event(struct input_handle *handle,
 	rcu_read_unlock();
 
 	wake_up_interruptible(&evdev->wait);
+#ifndef CONFIG_SCHED_BFS
 	sched_wake_interactive_disable();
+#endif
 }
 
 static int evdev_fasync(int fd, struct file *file, int on)
