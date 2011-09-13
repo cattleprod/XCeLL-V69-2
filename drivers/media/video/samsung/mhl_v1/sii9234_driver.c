@@ -2585,175 +2585,175 @@ void	AppRcpDemo( byte event, byte eventParameter)
 					break;
 
 				case MHD_RCP_CMD_LEFT_DOWN:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_LEFT_DOWN\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_LEFT_DOWN\n\n", (int)eventParameter ));
 					break;      
 
 				case MHD_RCP_CMD_ROOT_MENU:
-					TX_DEBUG_PRINT(( "\nRoot Menu received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nRoot Menu received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_SETUP_MENU:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_SETUP_MENU\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_SETUP_MENU\n\n", (int)eventParameter ));
 					break;      
 
 				case MHD_RCP_CMD_CONTENTS_MENU:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_CONTENTS_MENU\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_CONTENTS_MENU\n\n", (int)eventParameter ));
 					break;      
 
 				case MHD_RCP_CMD_FAVORITE_MENU:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_FAVORITE_MENU\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_FAVORITE_MENU\n\n", (int)eventParameter ));
 					break;            
 
 				case MHD_RCP_CMD_EXIT:
-					TX_DEBUG_PRINT(( "\nExit received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nExit received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_0:
-					TX_DEBUG_PRINT(( "\nNumber 0 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 0 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_1:
-					TX_DEBUG_PRINT(( "\nNumber 1 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 1 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_2:
-					TX_DEBUG_PRINT(( "\nNumber 2 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 2 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_3:
-					TX_DEBUG_PRINT(( "\nNumber 3 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 3 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_4:
-					TX_DEBUG_PRINT(( "\nNumber 4 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 4 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_5:
-					TX_DEBUG_PRINT(( "\nNumber 5 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 5 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_6:
-					TX_DEBUG_PRINT(( "\nNumber 6 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 6 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_7:
-					TX_DEBUG_PRINT(( "\nNumber 7 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 7 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_8:
-					TX_DEBUG_PRINT(( "\nNumber 8 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 8 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_NUM_9:
-					TX_DEBUG_PRINT(( "\nNumber 9 received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nNumber 9 received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_DOT:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_DOT\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_DOT\n\n", (int)eventParameter ));
 					break;          
 
 				case MHD_RCP_CMD_ENTER:
-					TX_DEBUG_PRINT(( "\nEnter received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nEnter received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_CLEAR:
-					TX_DEBUG_PRINT(( "\nClear received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nClear received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_CH_UP:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_CH_UP\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_CH_UP\n\n", (int)eventParameter ));
 					break; 
 
 				case MHD_RCP_CMD_CH_DOWN:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_CH_DOWN\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_CH_DOWN\n\n", (int)eventParameter ));
 					break;       
 
 				case MHD_RCP_CMD_PRE_CH:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_PRE_CH\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_PRE_CH\n\n", (int)eventParameter ));
 					break;           
 
 				case MHD_RCP_CMD_SOUND_SELECT:
-					TX_DEBUG_PRINT(( "\nSound Select received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nSound Select received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_INPUT_SELECT:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_INPUT_SELECT\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_INPUT_SELECT\n\n", (int)eventParameter ));
 					break;    
 
 				case MHD_RCP_CMD_SHOW_INFO:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_SHOW_INFO\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_SHOW_INFO\n\n", (int)eventParameter ));
 					break;     
 
 				case MHD_RCP_CMD_HELP:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_HELP\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_HELP\n\n", (int)eventParameter ));
 					break;   
 
 				case MHD_RCP_CMD_PAGE_UP:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_PAGE_UP\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_PAGE_UP\n\n", (int)eventParameter ));
 					break;  
 
 				case MHD_RCP_CMD_PAGE_DOWN:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_PAGE_DOWN\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_PAGE_DOWN\n\n", (int)eventParameter ));
 					break;             
 
 				case MHD_RCP_CMD_VOL_UP:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_VOL_UP\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_VOL_UP\n\n", (int)eventParameter ));
 					break;             
 
 				case MHD_RCP_CMD_VOL_DOWN:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_VOL_DOWN\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_VOL_DOWN\n\n", (int)eventParameter ));
 					break;             
 
 				case MHD_RCP_CMD_MUTE:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_MUTE\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_MUTE\n\n", (int)eventParameter ));
 					break;             
 
 				case MHD_RCP_CMD_PLAY:
-					TX_DEBUG_PRINT(( "\nPlay received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nPlay received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_STOP:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_STOP\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_STOP\n\n", (int)eventParameter ));
 					break;   
 
 				case MHD_RCP_CMD_PAUSE:
-					TX_DEBUG_PRINT(( "\nPause received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nPause received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_RECORD:
-					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_RECORD\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\n MHD_RCP_CMD_RECORD\n\n", (int)eventParameter ));
 					break;   
 
 				case MHD_RCP_CMD_FAST_FWD:
-					TX_DEBUG_PRINT(( "\nFastfwd received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nFastfwd received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_REWIND:
-					TX_DEBUG_PRINT(( "\nRewind received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nRewind received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_EJECT:
-					TX_DEBUG_PRINT(( "\nEject received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nEject received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_FWD:
-					TX_DEBUG_PRINT(( "\nForward received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nForward received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_BKWD:
-					TX_DEBUG_PRINT(( "\nBackward received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nBackward received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_PLAY_FUNC:
-					TX_DEBUG_PRINT(( "\nPlay Function received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nPlay Function received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_PAUSE_PLAY_FUNC:
-					TX_DEBUG_PRINT(( "\nPause_Play Function received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nPause_Play Function received\n\n", (int)eventParameter ));
 					break;
 
 				case MHD_RCP_CMD_STOP_FUNC:
-					TX_DEBUG_PRINT(( "\nStop Function received\n", (int)eventParameter ));
+					TX_DEBUG_PRINT(( "\nStop Function received\n\n", (int)eventParameter ));
 					break;
 
 				default:
