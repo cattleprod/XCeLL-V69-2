@@ -1274,8 +1274,6 @@ static int s5pv310_target(struct cpufreq_policy *policy,
 
 	unsigned int check_gov = 0;
 	
-	
-
 	mutex_lock(&set_cpu_freq_change);
 
 	if ((relation & ENABLE_FURTHER_CPUFREQ) &&
@@ -1289,8 +1287,7 @@ static int s5pv310_target(struct cpufreq_policy *policy,
 	}
 
 	if (!strncmp(policy->governor->name, "ondemand", CPUFREQ_NAME_LEN)
-	|| !strncmp(policy->governor->name, "conservative", CPUFREQ_NAME_LEN)) {
-		
+	|| !strncmp(policy->governor->name, "conservative", CPUFREQ_NAME_LEN)) {	
 		check_gov = 1;
 		if (relation & ENABLE_FURTHER_CPUFREQ)
 			s5pv310_dvs_locking = 0;
