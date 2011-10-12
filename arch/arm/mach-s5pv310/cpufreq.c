@@ -696,7 +696,7 @@ static struct cpufreq_voltage_table s5pv310_lookup_volt_table[] = {
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
-		.index		= L7,
+		.index		= L6,
 		.arm_volt	= 950000,
 		.int_volt	= 1000000,
 	},
@@ -753,7 +753,7 @@ static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
-		.index		= L7,
+		.index		= L6,
 		.arm_volt	= 950000,
 		.int_volt	= 1000000,
 	},
@@ -785,7 +785,7 @@ static struct cpufreq_voltage_table s5pv310_volt_table[CPUFREQ_LEVEL_END] = {
 		.arm_volt	= 1000000,
 		.int_volt	= 1000000,
 	}, {
-		.index		= L7,
+		.index		= L6,
 		.arm_volt	= 950000,
 		.int_volt	= 1000000,
 	},
