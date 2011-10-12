@@ -336,8 +336,8 @@ MODFLAGS	= -DMODULE
 CFLAGS_MODULE   = $(MODFLAGS)
 AFLAGS_MODULE   = $(MODFLAGS)
 LDFLAGS_MODULE  = -T $(srctree)/scripts/module-common.lds
-CFLAGS_KERNEL	= -ffast-math -fsingle-precision-constant -fgcse-sm -fsched2-use-superblocks -floop-interchange -floop-strip-mine -floop-block -fpredictive-commoning  
-AFLAGS_KERNEL	= -ffast-math -fsingle-precision-constant -fgcse-sm -fsched2-use-superblocks -floop-interchange -floop-strip-mine -floop-block -fpredictive-commoning  
+CFLAGS_KERNEL	= 
+AFLAGS_KERNEL	= 
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
 
@@ -538,7 +538,7 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
+KBUILD_CFLAGS	+= -O
 else
 KBUILD_CFLAGS	+= -O2
 endif
