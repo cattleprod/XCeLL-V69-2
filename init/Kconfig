@@ -41,6 +41,12 @@ config SCHED_BFS
           Say Y here.
 	default y
 
+config GPU_UNDERVOLTING
+	bool "gpu undervolting"
+	default n
+	help
+	 enable undervolting. if unsure, say n.
+
 config EXPERIMENTAL
 	bool "Prompt for development and/or incomplete code/drivers"
 	---help---
