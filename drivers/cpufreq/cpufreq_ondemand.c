@@ -324,7 +324,7 @@ static ssize_t store_deep_sleep(struct kobject *a, struct attribute *b,
 	unsigned int input;
 	int ret;
 	
-	unsigned int input;
+	ret = sscanf(buf, "%u", &input);
 	if (ret != 1)
 		return -EINVAL;
 		

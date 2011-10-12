@@ -955,6 +955,7 @@ static int cpufreq_add_dev(struct sys_device *sys_dev)
 	struct cpufreq_policy *cp;
 	for_each_online_cpu(sibling) {
 		cp = per_cpu(cpufreq_cpu_data, sibling);
+		struct cpufreq_policy *cp = per_cpu(cpufreq_cpu_data, sibling);
 		if (cp && cp->governor &&
 		    (cpumask_test_cpu(cpu, cp->related_cpus))) {
 			pr_debug("found sibling CPU, copying policy\n");
