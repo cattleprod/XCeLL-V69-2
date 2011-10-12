@@ -1128,7 +1128,7 @@ static irqreturn_t mxt224_irq_thread(int irq, void *ptr)
 					/*pr_emerg("%s: dvfs lock\n", __func__);*/
 
 				if (lock_status == 0) {
-					s5pv310_cpufreq_lock(DVFS_LOCK_ID_TSP, CPU_L3);
+					s5pv310_cpufreq_lock(DVFS_LOCK_ID_TSP, CPU_L5);
 					lock_status = 1;
 				}
 				if (msg[1] & PRESS_MSG_MASK)
