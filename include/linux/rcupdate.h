@@ -72,6 +72,8 @@ extern void rcu_init(void);
 #include <linux/rcutiny.h>
 #elif defined(CONFIG_CLASSIC_RCU)
 #include <linux/rcuclassic.h>
+#elif defined(CONFIG_JRCU)
+#include <linux/jrcu.h>
 #else
 #error "Unknown RCU implementation specified to kernel configuration"
 #endif
